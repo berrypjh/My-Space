@@ -1,0 +1,22 @@
+{
+  "name": "my-space",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berrypjh/My-Space.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/berrypjh/My-Space/issues"
+  },
+  "homepage": "https://github.com/berrypjh/My-Space#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
