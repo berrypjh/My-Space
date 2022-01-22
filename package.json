@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon block.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,9 @@
   "homepage": "https://github.com/berrypjh/My-Space#readme",
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "merkle": "^0.6.0"
   }
 }
