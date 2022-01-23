@@ -36,3 +36,7 @@ function addBlock(newBlock) {
   }
   return false;
 }
+
+module.exports = {
+  addBlock,
+}
