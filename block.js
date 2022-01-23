@@ -1,3 +1,7 @@
+const fs = require('fs');
+const merkle = require('merkle');
+const cryptojs = require('crypto-js');
+
 class Block {
   constructor(header, body) {
     this.header = header;
@@ -16,10 +20,6 @@ class BlockHeader {
     this.nonce = nonce;
   };
 };
-
-const fs = require('fs');
-const merkle = require('merkle');
-const cryptojs = require('crypto-js');
 
 function getVersion() {
   const package = fs.readFileSync("package.json");
@@ -60,10 +60,6 @@ function createHash(data) {
   return hash;
 }
 
-// const block = createGenesisBlock();
-// const testHash = createHash(block);
-// console.log(testHash);
-
 function nextBlock(bodyData) {
   const prevBlock = getLastBlock();
   const version = getVersion();
@@ -79,18 +75,8 @@ function nextBlock(bodyData) {
   return new Block(header, bodyData);
 }
 
-// const block1 = nextBlock(['transaction1']);
-// console.log(block1);
-
-function addBlock(bodyData) {
-  const newBlock = nextBlock(bodyData);
-  Blocks.push(newBlock);
+module.exports = {
+  Blocks,
+  getLastBlock,
+  createHash,
 }
-
-addBlock(['transaction1']);
-addBlock(['transaction2']);
-addBlock(['transaction3']);
-addBlock(['transaction4']);
-addBlock(['transaction5']);
-
-console.log(Blocks);
