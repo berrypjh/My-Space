@@ -1,7 +1,7 @@
 const merkle = require("merkle");
 const { Blocks, getLastBlock, createHash } = require('./block');
 
-function isValidBlockStructure(block) {
+const isValidBlockStructure = (block) => {
   return typeof(block.header.version) === 'string'
     && typeof(block.header.index) === 'number'
     && typeof(block.header.previousHash) === 'string'
@@ -10,7 +10,7 @@ function isValidBlockStructure(block) {
     && typeof(block.body) === 'object'
 }
 
-function isValidNewBlock(newBlock, previousBlock) {
+const isValidNewBlock = (newBlock, previousBlock) => {
   if (isValidBlockStructure(newBlock) === false) {
     console.log('Invalid Block Structure');
     return false;
@@ -29,7 +29,7 @@ function isValidNewBlock(newBlock, previousBlock) {
   return true;
 }
 
-function addBlock(newBlock) {
+const addBlock = (newBlock) => {
   if (isValidNewBlock(newBlock, getLastBlock())) {
     Blocks.push(newBlock)
     return true;

@@ -21,12 +21,12 @@ class BlockHeader {
   };
 };
 
-function getVersion() {
+const getVersion = () => {
   const package = fs.readFileSync("package.json");
   return JSON.parse(package).version;
 }
 
-function createGenesisBlock() {
+const createGenesisBlock = () => {
   const version = getVersion();
   const index = 0;
   const previousHash = '0'.repeat(64);
@@ -44,15 +44,15 @@ function createGenesisBlock() {
 
 let Blocks = [createGenesisBlock()];
 
-function getBlocks() {
+const getBlocks = () => {
   return Blocks;
 }
 
-function getLastBlock() {
+const getLastBlock = () => {
   return Blocks[Blocks.length - 1];
 }
 
-function createHash(data) {
+const createHash = (data) => {
   const { version, previousHash, timestamp, merkleRoot, bit, nonce } = data.header;
   const blockString = version + previousHash + timestamp + merkleRoot + bit + nonce;
   const hash = cryptojs.SHA256(blockString).toString();
@@ -60,7 +60,7 @@ function createHash(data) {
   return hash;
 }
 
-function nextBlock(bodyData) {
+const nextBlock = (bodyData) => {
   const prevBlock = getLastBlock();
   const version = getVersion();
   const index = prevBlock.header.index + 1;
