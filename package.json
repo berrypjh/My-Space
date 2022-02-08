@@ -1,0 +1,24 @@
+{
+  "name": "bitcoin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "block.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berrypjh/My-Space.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/berrypjh/My-Space/issues"
+  },
+  "homepage": "https://github.com/berrypjh/My-Space#readme",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.2",
+    "merkle": "^0.6.0"
+  }
+}
