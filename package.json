@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node httpServer.js",
     "dev": "node httpServer.js",
-    "dev-peer": "export HTTP_PORT=4001 && export P2P_PORT=6001 && node httpServer.js"
+    "dev-peer": "export HTTP_PORT=4001 && export P2P_PORT=6001 && node httpServer.js",
+    "dev-peer2": "export HTTP_PORT=4002 && export P2P_PORT=6002 && node httpServer.js"
   },
   "repository": {
     "type": "git",

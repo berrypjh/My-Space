@@ -1,6 +1,7 @@
 const WebSocket = require("ws");
 const { WebSocketServer } = require("ws");
-const { getLastBlock } = require("./block");
+const { getLastBlock, createHash, addBlock, getBlocks, replaceChain } = require("./block");
+const { isValidBlockStructure } = require("./checkValidBlock");
 
 const initP2PServer = (ws_port) => {
   const server = new WebSocketServer({ port: ws_port });
@@ -26,6 +27,20 @@ const responseLatestMsg = () => {
   return {
     type: MessageType.RESPONSE_BLOCKCHAIN,
     data: JSON.stringify([getLastBlock()]),
+  };
+};
+
+const queryAllMsg = () => {
+  return {
+    type: MessageType.QUERY_ALL,
+    data: null,
+  };
+};
+
+const responseAllChainMsg = () => {
+  return {
+    type: MessageType.RESPONSE_BLOCKCHAIN,
+    data: JSON.stringify(getBlocks()),
   };
 };
 
@@ -90,16 +105,53 @@ const initMessageHandler = (ws) => {
         write(ws, responseLatestMsg());
         break;
       case MessageType.QUERY_ALL:
-        console.log("QUERY_ALL");
-        console.log(message);
-        // 추가 예정
+        write(ws, responseAllChainMsg());
         break;
       case MessageType.RESPONSE_BLOCKCHAIN:
-        console.log("RESPONSE_BLOCKCHAIN");
-        console.log(message);
-        // 추가 예정
+        const receivedBlocks = message.data;
+        if (receivedBlocks === null) {
+          break;
+        }
+        handleBlockChainResponse(receivedBlocks);
         break;
     };
+  });
+};
+
+const handleBlockChainResponse = (message) => {
+  const receiveBlocks = JSON.parse(message);
+  if (receiveBlocks.length === 0) {
+    console.log("received block chain size of 0");
+    return;
+  };
+
+  const latestReceiveBlock = receiveBlocks[receiveBlocks.length - 1];
+  if (!isValidBlockStructure(latestReceiveBlock)) {
+    console.log("block structure not valid");
+    return;
+  };
+
+  const latestMyBlock = getLastBlock();
+  if (latestReceiveBlock.header.index > latestMyBlock.header.index) {
+    if (createHash(latestMyBlock) === latestReceiveBlock.header.previousHash) {
+      if (addBlock(latestReceiveBlock)) {
+        broadcast(responseLatestMsg());
+      } else {
+        console.log("Invaild Block!!");
+      }
+    } else if (receiveBlocks.length === 1) {
+      broadcast(queryAllMsg());
+    } else {
+      replaceChain(receiveBlocks);
+    }
+  } else {
+    console.log("Do nothing.");
+  };
+};
+
+const broadcast = (message) => {
+  sockets.forEach((socket) => {
+    write(socket, message);
   });
 };
 
@@ -107,4 +159,6 @@ module.exports = {
   initP2PServer,
   connectToPeers,
   getSockets,
+  broadcast,
+  responseLatestMsg,
 };

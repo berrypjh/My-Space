@@ -80,13 +80,51 @@ const nextBlock = (bodyData) => {
 
 const addBlock = (newBlock) => {
   const { isValidNewBlock } = require('./checkValidBlock');
-  
+  const { broadcast, responseLatestMsg } = require("./p2pServer");
+
   if (isValidNewBlock(newBlock, getLastBlock())) {
-    Blocks.push(newBlock)
+    Blocks.push(newBlock);
+    broadcast(responseLatestMsg());
     return true;
   };
 
   return false;
+};
+
+const isValidChain = (blockchainToValidate) => {
+  const { isValidNewBlock } = require('./checkValidBlock');
+
+  const isValidGenesis = (block) => {
+    return JSON.stringify(block) === JSON.stringify(createGenesisBlock());
+  };
+
+  if (!isValidGenesis(blockchainToValidate[0])) {
+    console.log(
+      "The candidateChains's genesisBlock is not the same as our genesisBlock"
+    );
+    return false;
+  };
+
+  for (let i = 1; i < blockchainToValidate.length; i++) {
+    if (i !== 0 && !isValidNewBlock(blockchainToValidate[i], blockchainToValidate[i - 1])) {
+      return null;
+    };
+  };
+  return true;
+};
+
+const replaceChain = (candidateChain) => {
+  const { broadcast, responseLatestMsg } = require("./p2pServer");
+
+  const foreignUTxOuts = isValidChain(candidateChain);
+  const validChain = foreignUTxOuts !== null;
+  if (validChain) {
+    Blocks = candidateChain;
+    broadcast(responseLatestMsg());
+    return true;
+  } else {
+    return false;
+  };
 };
 
 module.exports = {
@@ -96,4 +134,5 @@ module.exports = {
   nextBlock,
   addBlock,
   getLastBlock,
+  replaceChain,
 };

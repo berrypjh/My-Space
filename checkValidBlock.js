@@ -31,4 +31,5 @@ const isValidNewBlock = (newBlock, previousBlock) => {
 
 module.exports = {
   isValidNewBlock,
+  isValidBlockStructure,
 };
