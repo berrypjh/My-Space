@@ -95,4 +95,5 @@ module.exports = {
   getVersion,
   nextBlock,
   addBlock,
+  getLastBlock,
 };
